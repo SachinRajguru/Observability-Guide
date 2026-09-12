@@ -1,0 +1,64 @@
+# Custom values for kube-prometheus-stack
+
+# This file contains lab-specific configuration for:
+# - Grafana
+# - Alertmanager
+
+# The file is supplied to the Helm chart during installation:
+#
+# helm install monitoring \
+#   prometheus-community/kube-prometheus-stack \
+#   --namespace monitoring \
+#   --values ./custom_kube_prometheus_stack.yml
+
+# ---------------------------------------------------------------------------
+# Grafana
+# ---------------------------------------------------------------------------
+
+grafana:
+  # Lab-only administrator password.
+  #
+  # Username:
+  #   admin
+  
+  # IMPORTANT:
+  # Do not use a hard-coded password like this in production.
+  # Use an appropriate Kubernetes secret or external secrets-management
+  # solution for production environments.
+  adminPassword: prom-operator
+
+
+# ---------------------------------------------------------------------------
+# Alertmanager
+# ---------------------------------------------------------------------------
+
+alertmanager:
+  alertmanagerSpec:
+
+    # Select AlertmanagerConfig resources using the specified label.
+    
+    # An AlertmanagerConfig resource must have:
+    #
+    # metadata:
+    #   labels:
+    #     release: monitoring
+    
+    # This selector allows the Alertmanager instance to select the intended
+    # AlertmanagerConfig resources that have the matching label.
+    alertmanagerConfigSelector:
+      matchLabels:
+        release: monitoring
+
+    # Run two Alertmanager replicas for improved availability.
+    #
+    # With two replicas, Alertmanager can continue operating when one
+    # replica becomes unavailable.
+    replicas: 2
+
+    # Configure how AlertmanagerConfig resources are matched.
+    #
+    # "None" disables the default namespace-based matcher behavior and
+    # allows the AlertmanagerConfig selector above to determine which
+    # configurations are selected.
+    alertmanagerConfigMatcherStrategy:
+      type: None
