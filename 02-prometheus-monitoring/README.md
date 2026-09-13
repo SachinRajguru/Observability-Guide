@@ -227,23 +227,23 @@ Prometheus
 
 The Prometheus architecture consists of multiple components that work together to collect, store, query, visualize, and alert on metrics.
 
-![Prometheus Architecture](images/prometheus-architecture.gif)
+![Prometheus Architecture](images/prometheus-architecture.png)
 
 A simplified architecture is:
 
 ```text
-                         ┌─────────────────┐
-                         │   Service       │
-                         │   Discovery     │
-                         └────────┬────────┘
-                                  │
-                                  ▼
+                           ┌───────────────┐
+                           │   Service     │
+                           │   Discovery   │
+                           └───────┬───────┘
+                                   │
+                                   ▼
 ┌──────────────┐           ┌───────────────┐
 │ Applications │──────────►│               │
 └──────────────┘           │               │
                            │   Prometheus  │
-┌──────────────┐           │    Server     │
-│   Exporters  │──────────►│               │
+┌──────────────┐           │   Server      │
+│ Exporters    │──────────►│               │
 └──────────────┘           │               │
                            └───────┬───────┘
                                    │
@@ -768,11 +768,11 @@ The architecture will be:
                          AWS
                           │
                           ▼
-                    EKS Cluster
+                     EKS Cluster
                           │
              ┌────────────┴────────────┐
              │                         │
-        Control Plane              Node Group
+       Control Plane               Node Group
                                        │
                            ┌───────────┼───────────┐
                            │           │           │
@@ -1906,10 +1906,10 @@ The complete Prometheus monitoring workflow can be remembered as:
                    Kubernetes
                        │
                        ▼
-               Metrics Sources
+                Metrics Sources
                        │
                        ▼
-              Service Discovery
+               Service Discovery
                        │
                        ▼
                   Prometheus
@@ -1917,7 +1917,7 @@ The complete Prometheus monitoring workflow can be remembered as:
               ┌────────┴────────┐
               │                 │
               ▼                 ▼
-          PromQL           Alert Rules
+           PromQL          Alert Rules
               │                 │
               ▼                 ▼
            Grafana         Alertmanager
