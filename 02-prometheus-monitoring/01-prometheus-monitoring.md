@@ -260,25 +260,25 @@ The Prometheus ecosystem consists of multiple components that work together to c
 A simplified architecture is:
 
 ```text
-                         ┌─────────────────┐
-                         │ Service         │
-                         │ Discovery       │
-                         └────────┬────────┘
-                                  │
-                                  ▼
+                           ┌───────────────┐
+                           │   Service     │
+                           │   Discovery   │
+                           └───────┬───────┘
+                                   │
+                                   ▼
 ┌──────────────┐           ┌───────────────┐
 │ Applications │──────────►│               │
 └──────────────┘           │               │
                            │   Prometheus  │
-┌──────────────┐           │    Server     │
-│  Exporters   │──────────►│               │
+┌──────────────┐           │   Server      │
+│ Exporters    │──────────►│               │
 └──────────────┘           │               │
                            └───────┬───────┘
                                    │
                      ┌─────────────┼─────────────┐
                      │             │             │
                      ▼             ▼             ▼
-                   TSDB        PromQL/API    Alert Rules
+                   TSDB        PromQL/API   Alert Rules
                      │                           │
                      ▼                           ▼
                   Storage                   Alertmanager
@@ -909,11 +909,11 @@ The architecture will be:
                          AWS
                           │
                           ▼
-                    EKS Cluster
+                     EKS Cluster
                           │
              ┌────────────┴────────────┐
              │                         │
-        Control Plane              Node Group
+       Control Plane               Node Group
                                        │
                            ┌───────────┼───────────┐
                            │           │           │
@@ -922,12 +922,12 @@ The architecture will be:
                            └───────────┼───────────┘
                                        │
                                        ▼
-                              monitoring namespace
+                             monitoring namespace
                                        │
                          ┌─────────────┼─────────────┐
                          │             │             │
                          ▼             ▼             ▼
-                    Prometheus      Grafana      Alertmanager
+                    Prometheus      Grafana     Alertmanager
                          │
                          ▼
                       Metrics
@@ -950,10 +950,10 @@ Prometheus
               │
        ┌──────┴──────┐
        ▼             ▼
-    Grafana      Alertmanager
+    Grafana     Alertmanager
        │             │
        ▼             ▼
-  Dashboards    Notifications
+   Dashboards   Notifications
 ```
 
 ## 7. Prerequisites
@@ -1872,7 +1872,7 @@ Conceptually:
                    │
           ┌────────┴────────┐
           ▼                 ▼
-      Replica 1          Replica 2
+      Replica 1         Replica 2
 ```
 
 Running multiple replicas can improve availability.
