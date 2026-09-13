@@ -47,6 +47,8 @@ By the end of this section, we should be able to:
 
 > **Important:** This section focuses on the **fundamentals and concepts** of observability. Detailed installation, configuration, queries, dashboards, and implementation of individual tools are covered in later sections of the guide.
 
+![Introduction to Observability](images/Introduction-to-Observability.png)
+
 ## 2. What Is Observability?
 
 **Observability** is the ability to understand the internal state and behavior of a system by analyzing the data it produces.
@@ -492,6 +494,8 @@ It can also help teams improve:
 * System architecture
 
 Observability therefore supports both **incident response** and **continuous improvement**.
+
+![Why Monitoring and Observability](images/why-monitoring-why-observability.png)
 
 ## 5. Monitoring vs. Observability
 
