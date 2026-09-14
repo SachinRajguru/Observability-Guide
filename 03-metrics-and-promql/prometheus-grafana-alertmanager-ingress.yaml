@@ -1,0 +1,91 @@
+# Prometheus / Grafana / Alertmanager ALB Ingress
+
+# File: `prometheus-grafana-ingress.yaml`
+
+# Prerequisites:
+#   1. AWS Load Balancer Controller is installed.
+#   2. kube-prometheus-stack is installed with Helm release name:
+#        monitoring
+#   3. The stack is installed in namespace:
+#        monitoring
+#   4. Prometheus, Grafana, and Alertmanager are configured
+#      to work behind the selected path prefixes.
+
+# Lab routing:
+#   /prometheus    -> Prometheus
+#   /grafana       -> Grafana
+#   /alertmanager  -> Alertmanager
+
+# IMPORTANT:
+#   This manifest intentionally uses HTTP for lab purposes.
+#   Production environments should use HTTPS with an ACM certificate.
+
+# Verify the actual Service names before applying:
+#
+#   kubectl get svc -n monitoring
+
+# Expected Service names for a "monitoring" kube-prometheus-stack
+# Helm release:
+#
+#   monitoring-kube-prometheus-prometheus
+#   monitoring-grafana
+#   monitoring-kube-prometheus-alertmanager
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+
+metadata:
+  name: kubernetes-prometheus-stack
+  namespace: monitoring
+
+  annotations:
+    # Create an internet-facing Application Load Balancer.
+    # Use "internal" for an internal-only ALB.
+    alb.ingress.kubernetes.io/scheme: internet-facing
+
+    # Register Kubernetes Pod IP addresses directly as ALB targets.
+    alb.ingress.kubernetes.io/target-type: ip
+
+    # HTTP listener for lab use.
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+
+    # Use HTTP health checks for the lab services.
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+
+    # Use the Service traffic port for ALB health checks.
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+
+spec:
+  # Use the AWS Load Balancer Controller.
+  ingressClassName: alb
+
+  rules:
+    - http:
+        paths:
+
+          # Prometheus
+          - path: /prometheus
+            pathType: Prefix
+            backend:
+              service:
+                name: monitoring-kube-prometheus-prometheus
+                port:
+                  number: 9090
+
+          # Grafana
+          - path: /grafana
+            pathType: Prefix
+            backend:
+              service:
+                name: monitoring-grafana
+                port:
+                  number: 80
+
+          # Alertmanager
+          - path: /alertmanager
+            pathType: Prefix
+            backend:
+              service:
+                name: monitoring-kube-prometheus-alertmanager
+                port:
+                  number: 9093
