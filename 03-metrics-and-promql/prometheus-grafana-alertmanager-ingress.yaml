@@ -1,6 +1,6 @@
 # Prometheus / Grafana / Alertmanager ALB Ingress
 
-# File: `prometheus-grafana-ingress.yaml`
+# File: prometheus-grafana-alertmanager-ingress.yaml
 
 # Prerequisites:
 #   1. AWS Load Balancer Controller is installed.
