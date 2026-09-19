@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-a-deployment
+  namespace: dev
+  labels:
+    app: service-a-deployment
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: service-a-deployment
+
+  template:
+    metadata:
+      labels:
+        app: service-a-deployment
+
+    spec:
+      containers:
+        - name: service-a
+
+          # Our own Docker image.
+          image: sachinrajguru/instrumentation-service-a:1.0.0
+
+          # The versioned tag makes the deployment reproducible.
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - name: http
+              containerPort: 3001
+              protocol: TCP
+
+          env:
+            - name: PORT
+              value: "3001"
+
+            # Service B is reachable through Kubernetes DNS.
+            - name: SERVICE_B_URI
+              value: "http://b-service.dev"
+
+            # OTLP HTTP/protobuf endpoint.
+            #
+            # Adjust this endpoint to match the Jaeger/OpenTelemetry
+            # deployment used by the cluster.
+            - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+              value: "http://jaeger-collector.tracing:4318/v1/traces"
+
+          readinessProbe:
+            httpGet:
+              path: /healthy
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /healthy
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 20
