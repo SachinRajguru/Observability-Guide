@@ -1,0 +1,62 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: instrumentation-custom-alert-rules
+  namespace: monitoring
+
+  labels:
+    app: instrumentation-and-custom-metrics
+    release: monitoring
+
+spec:
+  groups:
+    - name: instrumentation.custom.rules
+
+      rules:
+
+        # ----------------------------------------------------
+        # High CPU Usage
+        # ----------------------------------------------------
+        #
+        # This alert is intentionally simple for learning.
+        #
+        # It fires when the average node CPU utilization
+        # remains above 50% for more than 5 minutes.
+
+        - alert: HighCpuUsage
+          expr: |
+            100 - (
+              avg by (instance) (
+                rate(node_cpu_seconds_total{mode="idle"}[5m])
+              ) * 100
+            ) > 50
+          for: 5m
+
+          labels:
+            severity: warning
+
+          annotations:
+            summary: "High CPU usage detected"
+            description: "Average CPU usage on {{ $labels.instance }} has remained above 50% for more than 5 minutes."
+
+
+        # ----------------------------------------------------
+        # Pod Restart
+        # ----------------------------------------------------
+        #
+        # Fires when a container has restarted more than
+        # two times during the selected time window.
+
+        - alert: PodRestart
+          expr: |
+            increase(kube_pod_container_status_restarts_total[15m]) > 2
+          for: 0m
+
+          labels:
+            severity: critical
+
+          annotations:
+            summary: "Pod restarted more than twice"
+            description: "Container {{ $labels.container }} in pod {{ $labels.namespace }}/{{ $labels.pod }} has restarted more than two times during the last 15 minutes."
+
+# The exact CPU metric availability depends on the monitoring stack installed in the cluster. If `node_cpu_seconds_total` isn't available in the existing Prometheus deployment, this alert should be adapted to the metrics already exposed by that stack rather than blindly applying it.

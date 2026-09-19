@@ -1,0 +1,29 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: a-service-service-monitor
+  namespace: monitoring
+
+  labels:
+    app: instrumentation-and-custom-metrics
+    release: monitoring
+
+spec:
+
+  # Use the Kubernetes Service label named "job"
+  # as the Prometheus job label.
+  jobLabel: job
+
+  namespaceSelector:
+    matchNames:
+      - dev
+
+  selector:
+    matchLabels:
+      app: a-service
+
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s
+      scrapeTimeout: 10s

@@ -1,0 +1,60 @@
+# A safer pattern is to reference the Kubernetes Secret rather than putting credentials directly into the manifest.
+
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: instrumentation-alert-config
+  namespace: monitoring
+
+  labels:
+    app: instrumentation-and-custom-metrics
+    release: monitoring
+
+spec:
+  route:
+    receiver: send-email
+
+    groupBy:
+      - alertname
+      - namespace
+
+    groupWait: 30s
+    groupInterval: 5m
+    repeatInterval: 4h
+
+    routes:
+      - receiver: send-email
+        matchers:
+          - name: severity
+            matchType: "="
+            value: critical
+
+      - receiver: send-email
+        matchers:
+          - name: severity
+            matchType: "="
+            value: warning
+
+  receivers:
+
+    - name: send-email
+
+      emailConfigs:
+        - to: "REPLACE_WITH_DESTINATION_EMAIL"
+          from: "REPLACE_WITH_SENDER_EMAIL"
+
+          smarthost: "smtp.gmail.com:587"
+
+          authUsername: "REPLACE_WITH_SENDER_EMAIL"
+
+          authPassword:
+            name: mail-pass
+            key: gmail-pass
+
+          requireTLS: true
+
+    - name: null
+
+# Replace the example email addresses with your own configuration when creating the real deployment.
+
+# Important: The exact AlertmanagerConfig fields supported depend on the Prometheus Operator version installed in the cluster. Validate the resource with `kubectl apply --dry-run=server` before deployment.
