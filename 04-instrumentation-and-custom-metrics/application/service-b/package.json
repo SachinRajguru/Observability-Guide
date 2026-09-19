@@ -1,0 +1,27 @@
+{
+  "name": "instrumentation-service-b",
+  "version": "1.0.0",
+  "description": "Node.js downstream service demonstrating OpenTelemetry distributed tracing",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "observability",
+    "opentelemetry",
+    "tracing",
+    "kubernetes"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@opentelemetry/exporter-trace-otlp-proto": "^0.222.0",
+    "@opentelemetry/instrumentation-express": "^0.70.0",
+    "@opentelemetry/instrumentation-http": "^0.222.0",
+    "@opentelemetry/resources": "^2.11.0",
+    "@opentelemetry/sdk-node": "^0.222.0",
+    "@opentelemetry/semantic-conventions": "^1.43.0",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.3",
+    "morgan": "^1.10.0"
+  }
+}
