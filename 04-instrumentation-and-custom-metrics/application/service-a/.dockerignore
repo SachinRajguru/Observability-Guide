@@ -1,0 +1,12 @@
+node_modules
+npm-debug.log
+.git
+.gitignore
+.env
+.env.*
+coverage
+*.log
+README.md
+metrics_instrumentation_analysis.md
+Dockerfile
+.dockerignore
