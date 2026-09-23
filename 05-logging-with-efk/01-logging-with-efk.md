@@ -1,6 +1,8 @@
 
 ## Logging with EFK
 
+> > **File:** `01-logging-with-efk.md`
+
 Structured execution guide for developers, DevOps, SRE, and infrastructure engineers covering centralized Kubernetes logging with Elasticsearch, Fluent Bit, and Kibana.
 
 ## Table of Contents
